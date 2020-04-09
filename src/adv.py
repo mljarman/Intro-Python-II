@@ -39,65 +39,48 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
-instructions = """In this game, navigate to different rooms using 'n', 's', 'e',
-               or 'w', picking up items along the way. Press 'q' to quit.
-               Let's go!"""
-
-def navigate(current_room, direction):
-    pass
-#
-# Main
-#
+instructions = """
+                In this game, navigate to different rooms using [n], [s], [e], [w].
+                Press [q] to quit. Let's go!"""
 
 # Make a new player object that is currently in the 'outside' room.
 name = input("Enter player name: ")
 if name == '':
     name = 'Guest'
-print(f'Welcome, {name}!\n')
-[print(line) for line in wrapper.wrap(text=instructions)]
-print('\n')
+print('-'*80)
+print(f'Welcome, {name}!')
+print('-'*80)
+print(textwrap.dedent(instructions)[1:-1])
+print('-'*80)
+print('')
 
 # Write a loop that:
 # * Prints the current room name
 # * Prints the current description (the textwrap module might be useful here).
 player = Player(name, room['outside'])
-print(f'You are currently: {player.current_room}')
 curr_room = player.current_room
-# will always be outside initially so print that description:
-[print(line) for line in wrapper.wrap(text=player.current_room.description)]
-print('\n')
+print(f'You are currently: {curr_room.name}')
+# print room description
+[print(line) for line in wrapper.wrap(text=curr_room.description)]
+print('-'*80)
 
-# If the user enters a cardinal direction, attempt to move to the room there.
-""" NEED TO CONDENSE THIS"""
+
 # * Waits for user input and decides what to do.
 inp = None
+directions = ['n', 's', 'e', 'w']
 while inp != 'q':
+    print('')
+    print('-'*80)
     inp = str(input("Where to? Enter direction to go: "))
+
     # if player ends game:
     if inp == 'q':
         print('Thanks for playing!')
         exit(0)
-    if inp == 'n':
-        if player.current_room.n_to == None:
-            print('\n Whoops! Try again.\n')
-        else:
-            player.current_room = player.current_room.n_to
-            print(player.current_room, '\n')
-    elif inp == 's':
-        if player.current_room.s_to == None:
-            print('\n Whoops! Try again.\n')
-        else:
-            player.current_room = player.current_room.s_to
-            print(player.current_room, '\n')
-    elif inp == 'e':
-        if player.current_room.e_to == None:
-            print('\n Whoops! Try again.\n')
-        else:
-            player.current_room = player.current_room.e_to
-            print(player.current_room, '\n')
-    elif inp == 'w':
-        if player.current_room.w_to == None:
-            print('\n Whoops! Try again.\n')
-        else:
-            player.current_room = player.current_room.w_to
-            print(player.current_room, '\n')
+    if inp not in directions:
+        print('WHOOPS! Invalid direction.')
+    else:
+        player.move_rooms(inp)
+        curr_room = player.current_room
+        print(f'Now you are in the: {curr_room.name}')
+        [print(line) for line in wrapper.wrap(text=curr_room.description)]
