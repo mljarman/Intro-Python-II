@@ -3,18 +3,16 @@ class Item:
     Contains information about items that are found in rooms and can
     be taken or dropped by players: name, description
     """
-    def __init__(self, name, description):
-        self.name = name
+    def __init__(self, item_name, description):
+        self.item_name = item_name
         self.description = description
 
-    def add_to_room(self, name):
-        """
-        Add item to room.
-        """
-        self.items.append(add_to_room)
+    def __str__(self):
+        return f'{self.item_name}, {self.description}'
 
-    def add_to_inventory(self, name):
-        """
-        Add item to player's inventory.
-        """
-        self.inventory.append(add_to_inventory)
+    def on_take(self):
+        print(f'You picked up the {self.item_name}')
+        print(self.description)
+
+    def on_drop(self):
+        print(f'You dropped the {self.item_name}')
